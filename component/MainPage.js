@@ -15,8 +15,6 @@ export default class MainPage extends Component {
     super(props);
   
     this.state = {
-      quote: 'Cuộc sống không bao giờ là bế tắc thực sự nếu con người ta dám rời bỏ lối mòn & dũng cảm tìm ra giá trị mới.',
-      author: 'Khuyết danh',
       username: '',
     };
   }
@@ -39,30 +37,6 @@ export default class MainPage extends Component {
         console.log('AsyncStorage error: ' + error.message);
         }            
   }
-    _onChangeText(event){
-     fetch('http://tuanitpro.com/android/api.php',{
-          method: "GET",
-            })
-          .then((response) => response.json())
-          .then((responseJSON) => {  
-                 let dataArray = responseJSON;
-                 var max = dataArray.length;
-                 var min  = 1;
-                 var randIndex = Math.floor(Math.random() * (max - min + 1)) + min;
-                var item = dataArray[randIndex];
-                if(item !=undefined){
-                  this.setState({
-                  quote : item.content,
-                  author : item.author
-                  });
-                  
-                }
-                console.log(item);
-          })
-          .catch((error) => {
-            console.warn(error);
-          }); 
-    }
     _onPressLogOut (event) {
        try {
             AsyncStorage.removeItem(STORAGE_KEY);
@@ -78,14 +52,8 @@ export default class MainPage extends Component {
         <ImageBackground style={[styles.container, styles.background]}
             source = {background}  resizeMode="cover">
         <View style={styles.container}>
-            <View style={styles.wrapper}>
-                <View style={styles.contents}>
-                    <TouchableOpacity activeOpacity={.10} onPress={this._onChangeText.bind(this)} keyboardShouldPersistTaps={true}>
-                        <Text style={styles.quotes}>{this.state.quote}</Text>
-                        <Text style={styles.author}>{this.state.author}</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
+            
+
         </View>
         <View style={styles.footer}>
             <TouchableOpacity activeOpacity={.5} onPress={this._onPressLogOut.bind(this)} keyboardShouldPersistTaps={true}>
