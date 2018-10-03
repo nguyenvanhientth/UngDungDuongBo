@@ -4,7 +4,7 @@ import {AppRegistry,StyleSheet,Text,View,Image,ScrollView,
 
 
 var STORAGE_KEY = 'key_access_token';
-const background = require('./image/bg_quotes.jpg') ;
+const background = require('./image/hinhnen.jpg') ;
 
 export default class MainPage extends Component {
    static navigationOptions = {
@@ -80,7 +80,7 @@ export default class MainPage extends Component {
         <View style={styles.container}>
             <View style={styles.wrapper}>
                 <View style={styles.contents}>
-                    <TouchableOpacity activeOpacity={.5} onPress={this._onChangeText.bind(this)} keyboardShouldPersistTaps={true}>
+                    <TouchableOpacity activeOpacity={.10} onPress={this._onChangeText.bind(this)} keyboardShouldPersistTaps={true}>
                         <Text style={styles.quotes}>{this.state.quote}</Text>
                         <Text style={styles.author}>{this.state.author}</Text>
                     </TouchableOpacity>

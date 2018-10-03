@@ -14,10 +14,9 @@ class ForgotPassPage extends Component {
   render() {
     return (
         <View style={{flex: 1, backgroundColor: '#3399cc', alignItems: 'center', justifyContent: 'center'}}>
-            <Text style={{color: 'white', fontSize: 32,}}> HIEN NGUYEN </Text>
             <Image
             style={{width: 350, height: 350}}
-            source={{uri: 'https://avatars2.githubusercontent.com/u/7970947?v=3&s=460'}}
+            source={{uri: 'https://dulieu.itrithuc.vn/uploads/group/2018-08-13-010716.8487832017-12-30-081545.841749quoc-huy2x.png'}}
             />
         </View>
     );

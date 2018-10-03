@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import {AppRegistry,StyleSheet,Text,TextInput,Button,View,Alert,TouchableOpacity,TouchableHighlight,
     Image,AsyncStorage,ImageBackground} from 'react-native';
 import {StackNavigator,} from 'react-navigation';
+import env from './environment/env'
 
-const BASE_URL = "http://ec2-52-27-149-161.us-west-2.compute.amazonaws.com";
-const background = require('./image/background.png') ;
+const BASE_URL = env;
+const background = require('./image/hinhnen.jpg') ;
 const lockIcon = require('./image/ic_lock.png');
 const userIcon = require('./image/ic_user.png');
  var STORAGE_KEY = 'key_access_token';
