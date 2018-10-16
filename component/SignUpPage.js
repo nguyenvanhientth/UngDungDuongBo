@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {AppRegistry,StyleSheet,Text,TextInput,Button,View,Alert,TouchableOpacity,TouchableHighlight,
+import {AppRegistry,StyleSheet,Text,TextInput,Button,View,Alert,TouchableOpacity,
   Image,AsyncStorage,ToastAndroid,ImageBackground} from 'react-native';
 import {StackNavigator,} from 'react-navigation';
 import env from './environment/env';
@@ -10,6 +10,9 @@ const lockIcon = require('./image/ic_lock.png');
 const userIcon = require('./image/ic_user.png');
  
 export default class SignUpPage extends Component {
+    static navigationOptions = {
+        title: 'Register',
+      };
   constructor(props) {
     super(props);
   
@@ -17,16 +20,34 @@ export default class SignUpPage extends Component {
       userName: '',
       password: '',
       confirmPassword: '',
+      Email: '',
+      FirstName: '',
+      LastName: '',
+      DOB: '',
+      Address: '',
+      Gender: '',
+      Position: '',
+      PhoneNumber: '',
+      Note: ''
     };
   }
   componentWillMount() {
         console.log("componentWillMount");
     }
   _onPressLogin (event) {
-     let serviceUrl = BASE_URL+  "/api/account/register";
+     let serviceUrl = BASE_URL+  "api/Account/Register";
       let userName = this.state.userName;
       let password = this.state.password;
       let confirmPassword = this.state.confirmPassword;
+      let Email = this.state.Email;
+      let FirstName = this.state.FirstName;
+      let LastName = this.state.LastName;
+      let DOB = this.state.DOB;
+      let Address = this.state.Address;
+      let Gender = this.state.Gender;
+      let Position = this.state.Position;
+      let PhoneNumber = this.state.PhoneNumber;
+      let Note = this.state.Note;
       // kiem tra o day  
     fetch(serviceUrl,{
         method: "POST",          
@@ -37,7 +58,17 @@ export default class SignUpPage extends Component {
       body: JSON.stringify({
         'username': userName,
         'password': password,
-        'confirmPassword':confirmPassword
+        'confirmPassword':confirmPassword,
+        'Email': Email,
+        'FirstName': FirstName,
+        'LastName': LastName,
+        'DOB': DOB,
+        'Address': Address,
+        'Gender': Gender,
+        'Position': Position,
+        'PhoneNumber': PhoneNumber,
+        'Note': Note
+
       })
         })
           .then((response) => response.json())
@@ -45,11 +76,11 @@ export default class SignUpPage extends Component {
                 if(responseJSON.message=="Success"){
                      var { navigate } = this.props.navigation;
                      navigate('LoginPage');
-                    ToastAndroid.show(responseJSON.message, ToastAndroid.SHORT)
+                    ToastAndroid.show(responseJSON.message, ToastAndroid.SHORT);
                 }
           })
           .catch((error) => {
-            console.warn(error);
+            console.warn(error);debugger;
           });  
   }
   static navigationOptions = {
@@ -81,12 +112,66 @@ export default class SignUpPage extends Component {
                     </View>
                       <TextInput style={styles.input} placeholder="Confirm Password"  secureTextEntry={true}  onChangeText={(confirmPassword) => this.setState({confirmPassword})} underlineColorAndroid="transparent"/>
                 </View>
+                <View style={styles.inputWrap}>
+                    <View style={styles.iconWrap}>
+                        <Image source={userIcon} resizeMode="contain" style={styles.icon}/>
+                    </View>
+                    <TextInput  style={styles.input} placeholder="Email" onChangeText={(Email) => this.setState({Email})} underlineColorAndroid="transparent"/>
+                </View>
+                <View style={styles.inputWrap}>
+                    <View style={styles.iconWrap}>
+                        <Image source={userIcon} resizeMode="contain" style={styles.icon}/>
+                    </View>
+                    <TextInput  style={styles.input} placeholder="FirstName" onChangeText={(FirstName) => this.setState({FirstName})} underlineColorAndroid="transparent"/>
+                </View>
+                <View style={styles.inputWrap}>
+                    <View style={styles.iconWrap}>
+                        <Image source={userIcon} resizeMode="contain" style={styles.icon}/>
+                    </View>
+                    <TextInput  style={styles.input} placeholder="LastName" onChangeText={(LastName) => this.setState({LastName})} underlineColorAndroid="transparent"/>
+                </View>
+                <View style={styles.inputWrap}>
+                    <View style={styles.iconWrap}>
+                        <Image source={userIcon} resizeMode="contain" style={styles.icon}/>
+                    </View>
+                    <TextInput  style={styles.input} placeholder="DateOfBirth" onChangeText={(DOB) => this.setState({DOB})} underlineColorAndroid="transparent"/>
+                </View>
+                <View style={styles.inputWrap}>
+                    <View style={styles.iconWrap}>
+                        <Image source={userIcon} resizeMode="contain" style={styles.icon}/>
+                    </View>
+                    <TextInput  style={styles.input} placeholder="Address" onChangeText={(Address) => this.setState({Address})} underlineColorAndroid="transparent"/>
+                </View>
+                <View style={styles.inputWrap}>
+                    <View style={styles.iconWrap}>
+                        <Image source={userIcon} resizeMode="contain" style={styles.icon}/>
+                    </View>
+                    <TextInput  style={styles.input} placeholder="Gender" onChangeText={(Gender) => this.setState({Gender})} underlineColorAndroid="transparent"/>
+                </View>
+                <View style={styles.inputWrap}>
+                    <View style={styles.iconWrap}>
+                        <Image source={userIcon} resizeMode="contain" style={styles.icon}/>
+                    </View>
+                    <TextInput  style={styles.input} placeholder="Position" onChangeText={(Position) => this.setState({Position})} underlineColorAndroid="transparent"/>
+                </View>
+                <View style={styles.inputWrap}>
+                    <View style={styles.iconWrap}>
+                        <Image source={userIcon} resizeMode="contain" style={styles.icon}/>
+                    </View>
+                    <TextInput  style={styles.input} placeholder="PhoneNumber" onChangeText={(PhoneNumber) => this.setState({PhoneNumber})} underlineColorAndroid="transparent"/>
+                </View>
+                <View style={styles.inputWrap}>
+                    <View style={styles.iconWrap}>
+                        <Image source={userIcon} resizeMode="contain" style={styles.icon}/>
+                    </View>
+                    <TextInput  style={styles.input} placeholder="Note" onChangeText={(Note) => this.setState({Note})} underlineColorAndroid="transparent"/>
+                </View>
                 <TouchableOpacity activeOpacity={.5} onPress={this._onPressLogin.bind(this)} keyboardShouldPersistTaps={true}>
                     <View style={styles.button}>
                         <Text style={styles.buttonText}> Sign Up</Text>
                     </View>           
                 </TouchableOpacity>
-                <TouchableOpacity activeOpacity={.5} onPress={() => navigate('LoginPage')}>
+                <TouchableOpacity activeOpacity={.5} onPress={() => navigate('MainPage')}>
                     <View >
                         <Text style={styles.forgotPasswordText}>Cancel</Text>        
                     </View>      

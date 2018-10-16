@@ -10,36 +10,47 @@ const lockIcon = require('./image/ic_lock.png');
 const userIcon = require('./image/ic_user.png');
  var STORAGE_KEY = 'key_access_token';
 export default class LoginPage extends Component {
+  static navigationOptions = {
+    title: 'Login',
+  };
   constructor(props) {
     super(props);
     this.state = {
-      userName: '',
-      password: '',
+      userNames: '',
+      passwords: '',
     };
   }
-componentWillMount() {                          
-}
-  _onPressLogin (event) {
-      let serviceUrl =  BASE_URL + "/oauth2/token";
-      let userName = this.state.userName;
-      let password = this.state.password;
+
+  _onPressLogin = () => {
+      let serviceUrl =  BASE_URL + "Authentication";
+      let userName = this.state.userNames;
+      let password = this.state.passwords;
       var access_token = '';
-      let postData = "grant_type=password&username=" + userName + "&password=" + password;              
+      if(userName.length === 0 || password.length === 0){
+        alert('Ban chua nhap day du! ')
+      }
+      else{
+        let postData = new FormData();
+        postData.append('UserName',userName);
+        postData.append('PassWord',password);   
+        //console.warn('asd',userName,password)           
         fetch(serviceUrl,{
           method: "POST",  
         headers: {
           'Accept': 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'multipart/form-data'
         },
               body: postData
         })
           .then((response) => response.json())
-          .then((responseJSON) => {       
+          .then((responseJSON) => {      
+              //console.warn('asdasd',JSON.stringify(responseJSON.token)) ; 
               var { navigate } = this.props.navigation;
-               access_token = responseJSON.access_token; 
+               access_token = responseJSON.token; 
+               console.warn('access_token',access_token) ; 
                if(access_token !=undefined){
                           try {
-                              AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(responseJSON));
+                              AsyncStorage.setItem(STORAGE_KEY, access_token);
                                 navigate('MainPage');
                             } catch (error) {
                               console.log('AsyncStorage error: ' + error.message);
@@ -50,13 +61,22 @@ componentWillMount() {
                }  
           })
           .catch((error) => {
-            console.warn(error);
+            Alert.alert('Login failure');
+            console.log(error);
           }); 
+      }
+      
   }
   static navigationOptions = {
     title: 'Login',
      header: null,
   };
+  _onChaneText = (userNames) =>{
+    this.setState({userNames});
+  }
+  _onChanePassWord = (passwords) =>{
+    this.setState({passwords}); 
+  }
   render() {
      var { navigate } = this.props.navigation;
     return (
@@ -68,13 +88,13 @@ componentWillMount() {
                     <View style={styles.iconWrap}>
                         <Image source={userIcon} resizeMode="contain" style={styles.icon}/>
                     </View>
-                    <TextInput  style={styles.input} placeholder="Username" onChangeText={(userName) => this.setState({userName})} underlineColorAndroid="transparent"/>
+                    <TextInput  style={styles.input} placeholder="Username" onChangeText={this._onChaneText.bind(this)} underlineColorAndroid="transparent"/>
                 </View>
                 <View style={styles.inputWrap}>
                     <View style={styles.iconWrap}>
                         <Image source={lockIcon} resizeMode="contain" style={styles.icon}/>
                     </View>
-                    <TextInput style={styles.input} placeholder="Password" secureTextEntry={true}  onChangeText={(password) => this.setState({password})} underlineColorAndroid="transparent"/>
+                    <TextInput style={styles.input} placeholder="Password" secureTextEntry={true}  onChangeText={this._onChanePassWord.bind(this)} underlineColorAndroid="transparent"/>
                 </View>
                 <TouchableOpacity activeOpacity={.5} onPress={this._onPressLogin.bind(this)} keyboardShouldPersistTaps={true}>
                     <View style={styles.button}>
@@ -86,11 +106,7 @@ componentWillMount() {
                     <Text style={styles.forgotPasswordText}>Forgot password?</Text>        
                     </View>      
                 </TouchableOpacity>
-                <TouchableOpacity activeOpacity={.5} onPress={()=>navigate('SignUpPage')} keyboardShouldPersistTaps={true}>
-                    <View style={styles.button}>
-                        <Text style={styles.buttonText}> Sign Up</Text>
-                    </View>   
-                </TouchableOpacity>
+                
             </View>                        
         <View style={styles.container}/>
         </ImageBackground>
@@ -149,16 +165,6 @@ const styles = StyleSheet.create({
     color:'#FFFFFF',
        backgroundColor:"transparent",
          textAlign: 'center',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
   },
 });
 module.exports = LoginPage;

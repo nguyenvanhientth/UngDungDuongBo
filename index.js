@@ -11,15 +11,20 @@ import MainPage from './component/MainPage';
  import LoginPage from './component/LoginPage';
  import ForgotPassPage from './component/ForgotPassPage';
  import SignUpPage from './component/SignUpPage';
+ import UpdateImage from './component/UpdateImage';
 
 
 
 const MyApp = StackNavigator({
   SplashPage: { screen: SplashPage },
-  MainPage: { screen: MainPage },
-  LoginPage: { screen: LoginPage },
+  MainPage: { 
+    screen: MainPage, 
+  },
+  LoginPage: { screen: LoginPage,
+  },
   ForgotPassPage: { screen: ForgotPassPage },
-  SignUpPage: {screen: SignUpPage}
+  SignUpPage: {screen: SignUpPage},
+  UpdateImagePage: {screen: UpdateImage}
 });
 
 AppRegistry.registerComponent(appName, () => MyApp);

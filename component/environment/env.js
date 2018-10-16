@@ -1,2 +1,2 @@
-const url = 'http://ec2-52-27-149-161.us-west-2.compute.amazonaws.com'
+const url = 'http://192.168.82.28/TmanagerServer/api/'
 export default url;
