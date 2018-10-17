@@ -12,6 +12,7 @@ const userIcon = require('./image/ic_user.png');
 export default class LoginPage extends Component {
   static navigationOptions = {
     title: 'Login',
+    headers: null
   };
   constructor(props) {
     super(props);
@@ -47,7 +48,7 @@ export default class LoginPage extends Component {
               //console.warn('asdasd',JSON.stringify(responseJSON.token)) ; 
               var { navigate } = this.props.navigation;
                access_token = responseJSON.token; 
-               console.warn('access_token',access_token) ; 
+               //console.warn('access_token',access_token) ; 
                if(access_token !=undefined){
                           try {
                               AsyncStorage.setItem(STORAGE_KEY, access_token);
@@ -67,10 +68,6 @@ export default class LoginPage extends Component {
       }
       
   }
-  static navigationOptions = {
-    title: 'Login',
-     header: null,
-  };
   _onChaneText = (userNames) =>{
     this.setState({userNames});
   }
@@ -82,8 +79,8 @@ export default class LoginPage extends Component {
     return (
       <ImageBackground style={[styles.container, styles.background]}
         source = {background}  resizeMode="cover">
-        <View style={styles.container}/>
-          <View style={styles.wrapper}>
+          <View style={styles.container}/>
+              <View style={styles.wrapper}>
                 <View style={styles.inputWrap}>
                     <View style={styles.iconWrap}>
                         <Image source={userIcon} resizeMode="contain" style={styles.icon}/>
@@ -105,11 +102,10 @@ export default class LoginPage extends Component {
                     <View >
                     <Text style={styles.forgotPasswordText}>Forgot password?</Text>        
                     </View>      
-                </TouchableOpacity>
-                
+                </TouchableOpacity> 
             </View>                        
-        <View style={styles.container}/>
-        </ImageBackground>
+          <View style={styles.container}/>
+      </ImageBackground>
     );
   }
 }
@@ -140,14 +136,14 @@ const styles = StyleSheet.create({
     paddingHorizontal:7,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor:"#d73352"
+    backgroundColor:"#2E9AFE"
     },
   icon:{
     width:20,
     height:20,
     },
   button:{
-    backgroundColor:"#d73352",
+    backgroundColor:"#2ECCFA",
     paddingVertical: 8,
     marginVertical:8,
     alignItems: "center",
@@ -157,12 +153,12 @@ const styles = StyleSheet.create({
 
   buttonText: {
       fontSize: 16,
-      color:'#FFFFFF',
+      color:'#000000',
       textAlign: 'center',
      
   },
   forgotPasswordText:{
-    color:'#FFFFFF',
+    color:'#0404B4',
        backgroundColor:"transparent",
          textAlign: 'center',
   },

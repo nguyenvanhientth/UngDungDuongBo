@@ -32,7 +32,7 @@ export default class MainPage extends Component {
     try {
         AsyncStorage.getItem(STORAGE_KEY).then((user_data_json) => {
             let token = user_data_json;        
-            console.warn(token);
+            //console.warn(token);
             fetch(BASE_URL + "Account/GetUserInformation",{
                 //method: "GET",
                 headers:{ 
@@ -41,7 +41,7 @@ export default class MainPage extends Component {
                 }
             }).then((res)=>res.json())
             .then((resJson) => {
-                console.warn("resJson",resJson);
+                //console.warn("resJson",resJson);
                 this.setState({
                     firstName: resJson.firstName,
                     lastName: resJson.lastName,
@@ -84,44 +84,83 @@ export default class MainPage extends Component {
     }
 
  render() {
-    return (
-        <ImageBackground style={[styles.container, styles.background]}
-            source = {background}  resizeMode="cover">
-        <Text style = {styles.text}> Hi {this.state.firstName}</Text>
-        <View style={styles.ThongTin}>
-            <Text style={styles.text}> userName: {this.state.userName} </Text>
-            <Text style={styles.text}> firstName: {this.state.firstName} </Text>
-            <Text style={styles.text}> lastName: {this.state.lastName} </Text>
-            <Text style={styles.text}> Dia chi: {this.state.Address} </Text>
-            <Text style={styles.text}> Email: {this.state.Email} </Text>
-            <Text style={styles.text}> Ngay sinh: {this.state.DOB} </Text>
-            <Text style={styles.text}> Gioi tinh: {this.state.Gender} </Text>
-            <Text style={styles.text}> Phone: {this.state.PhoneNumber} </Text>
-        </View>
-        <View style={styles.footer}>
-            <TouchableOpacity activeOpacity={.5} onPress={()=>this.props.navigation.navigate('UpdateImagePage')} keyboardShouldPersistTaps={true}>
+     if (this.state.Position === "Admin") {
+        return (
+            <ImageBackground style={[styles.container, styles.background]}
+                source = {background}  resizeMode="cover">
+            <Text style = {styles.text}> Hi {this.state.firstName}</Text>
+            <View style={styles.ThongTin}>
+                <Text style={styles.text}> userName: {this.state.userName} </Text>
+                <Text style={styles.text}> firstName: {this.state.firstName} </Text>
+                <Text style={styles.text}> lastName: {this.state.lastName} </Text>
+                <Text style={styles.text}> Address: {this.state.Address} </Text>
+                <Text style={styles.text}> Email: {this.state.Email} </Text>
+                <Text style={styles.text}> DateOfBirth: {this.state.DOB} </Text>
+                <Text style={styles.text}> Gender: {this.state.Gender} </Text>
+                <Text style={styles.text}> Phone: {this.state.PhoneNumber} </Text>
+                <Text style={styles.text}> Position: {this.state.Position}</Text>
+            </View>
+            <View style={styles.footer}>
+                <TouchableOpacity activeOpacity={.5} onPress={()=>this.props.navigation.navigate('UpdateImagePage')} keyboardShouldPersistTaps={true}>
+                        <View style={styles.button}>
+                            <Text style={styles.buttonText}> Up image </Text>
+                        </View>   
+                </TouchableOpacity>
+                <TouchableOpacity activeOpacity={.5} onPress={()=>this.props.navigation.navigate('UpdateImagePage')} keyboardShouldPersistTaps={true}>
+                        <View style={styles.button}>
+                            <Text style={styles.buttonText}> Display checked </Text>
+                        </View>   
+                </TouchableOpacity>
+                <TouchableOpacity activeOpacity={.5} onPress={()=>this.props.navigation.navigate('SignUpPage')} keyboardShouldPersistTaps={true}>
+                        <View style={styles.button}>
+                            <Text style={styles.buttonText}> Sign Up</Text>
+                        </View>   
+                </TouchableOpacity>
+                <TouchableOpacity activeOpacity={.5} onPress={this._onPressLogOut.bind(this)} keyboardShouldPersistTaps={true}>
                     <View style={styles.button}>
-                        <Text style={styles.buttonText}> Up image </Text>
-                    </View>   
-            </TouchableOpacity>
-            <TouchableOpacity activeOpacity={.5} onPress={()=>this.props.navigation.navigate('UpdateImagePage')} keyboardShouldPersistTaps={true}>
-                    <View style={styles.button}>
-                        <Text style={styles.buttonText}> Display checked </Text>
-                    </View>   
-            </TouchableOpacity>
-            <TouchableOpacity activeOpacity={.5} onPress={()=>this.props.navigation.navigate('SignUpPage')} keyboardShouldPersistTaps={true}>
-                    <View style={styles.button}>
-                        <Text style={styles.buttonText}> Sign Up</Text>
-                    </View>   
-            </TouchableOpacity>
-            <TouchableOpacity activeOpacity={.5} onPress={this._onPressLogOut.bind(this)} keyboardShouldPersistTaps={true}>
-                <View style={styles.button}>
-                    <Text style={styles.buttonText}>Logout</Text>
-                </View>      
-            </TouchableOpacity> 
-        </View>
-       </ImageBackground>
-    );
+                        <Text style={styles.buttonText}>Logout</Text>
+                    </View>      
+                </TouchableOpacity> 
+            </View>
+           </ImageBackground>
+        );
+     } else {
+        return (
+            <ImageBackground style={[styles.container, styles.background]}
+                source = {background}  resizeMode="cover">
+                <Text style = {{color: "#0404B4", fontSize: 30}}> Hi {this.state.firstName}</Text>
+                <View style={styles.ThongTin}>
+                    <Text style = {{fontSize: 32, color: "black", textAlign: 'left'}}>Thong Tin:</Text>
+                    <Text style={styles.text}> userName: {this.state.userName} </Text>
+                    <Text style={styles.text}> firstName: {this.state.firstName} </Text>
+                    <Text style={styles.text}> lastName: {this.state.lastName} </Text>
+                    <Text style={styles.text}> Address: {this.state.Address} </Text>
+                    <Text style={styles.text}> Email: {this.state.Email} </Text>
+                    <Text style={styles.text}> DateOfBirth: {this.state.DOB} </Text>
+                    <Text style={styles.text}> Gender: {this.state.Gender} </Text>
+                    <Text style={styles.text}> Phone: {this.state.PhoneNumber} </Text>
+                    <Text style={styles.text}> Position: {this.state.Position}</Text>
+                </View>
+                <View style={styles.footer}>
+                    <TouchableOpacity activeOpacity={.5} onPress={()=>this.props.navigation.navigate('UpdateImagePage')} keyboardShouldPersistTaps={true}>
+                            <View style={styles.button}>
+                                <Text style={styles.buttonText}> Up image </Text>
+                            </View>   
+                    </TouchableOpacity>
+                    <TouchableOpacity activeOpacity={.5} onPress={()=>this.props.navigation.navigate('UpdateImagePage')} keyboardShouldPersistTaps={true}>
+                            <View style={styles.button}>
+                                <Text style={styles.buttonText}> Display checked </Text>
+                            </View>   
+                    </TouchableOpacity>
+                    <TouchableOpacity activeOpacity={.5} onPress={this._onPressLogOut.bind(this)} keyboardShouldPersistTaps={true}>
+                        <View style={styles.button}>
+                            <Text style={styles.buttonText}>Logout</Text>
+                        </View>      
+                    </TouchableOpacity> 
+                </View>
+            </ImageBackground>
+        );
+     }
   } 
 }
  
@@ -145,7 +184,7 @@ background:{
       paddingHorizontal:15,
   },
     button:{
-        backgroundColor:"#d73352",
+        backgroundColor:"#5858FA",
         paddingVertical: 8,
         marginVertical:3,
         alignItems: "center",
@@ -166,9 +205,11 @@ background:{
   },
   ThongTin: {
     backgroundColor: '#fff',
-    alignItems: "center",
+    alignItems: "flex-start",
     position: "relative",
     borderRadius: 20,
-    margin: 10
+    margin: 10,
+    paddingTop: 10,
+    paddingBottom: 20
   }
 });

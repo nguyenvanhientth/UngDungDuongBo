@@ -1,35 +1,10 @@
 import React, {Component} from 'react';
 import {
-  View, Text, StyleSheet, ScrollView, Alert,
+  View, Text, StyleSheet, ScrollView, TextInput,
   Image, TouchableOpacity, NativeModules, Dimensions
 } from 'react-native';
 
 var ImagePicker = NativeModules.ImageCropPicker;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  button:{
-    backgroundColor:"#d73352",
-    paddingVertical: 8,
-    marginVertical: 5,
-    alignItems: "center",
-    justifyContent: "center",
-},
-buttonText: {
-  fontSize: 16,
-  color:'#FFFFFF',
-  textAlign: 'center',   
-},
-  text: {
-    color: 'white',
-    fontSize: 20,
-    textAlign: 'center'
-  }
-});
 
 export default class App extends Component {
   static navigationOptions = {
@@ -40,7 +15,10 @@ export default class App extends Component {
     super(props);
     this.state = {
       image: null,
-      images: null
+      images: null,
+      content: '',
+      address: '',
+      note: '',
     };
   }
 
@@ -85,23 +63,81 @@ export default class App extends Component {
 
   render() {
     return (
-    <View style={styles.container}>
       <ScrollView>
-        {this.state.image ? this.renderAsset(this.state.image) : null}
-        {this.state.images ? this.state.images.map(i => <View key={i.uri}>{this.renderAsset(i)}</View>) : null}
-      </ScrollView>
-
-      <TouchableOpacity onPress={() => this.pickSingleWithCamera(false)} keyboardShouldPersistTaps={true}>
-        <View style={styles.button}>
-          <Text style={styles.buttonText}> Select image camera</Text>
-        </View>  
-      </TouchableOpacity>
-      <TouchableOpacity onPress={this.pickMultiple.bind(this)} style={styles.button}>
-        <Text style={styles.text}>Select Multiple</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={this.pickMultiple.bind(this)} style={styles.button}>
-        <Text style={styles.text}>Update yeu cau</Text>
-      </TouchableOpacity>
-    </View>);
+        <View style= {[styles.container,styles.view]}>
+          <ScrollView horizontal = {true}>
+            {this.state.image ? this.renderAsset(this.state.image) : null}
+            {this.state.images ? this.state.images.map(i => <View key={i.uri}>{this.renderAsset(i)}</View>) : null}
+          </ScrollView>
+            <TouchableOpacity onPress={() => this.pickSingleWithCamera(false)} keyboardShouldPersistTaps={true}>
+              <View style={styles.button}>
+                <Text style={styles.buttonText}> Select image camera</Text>
+              </View>  
+            </TouchableOpacity>
+            <TouchableOpacity onPress={this.pickMultiple.bind(this)} style={styles.button}>
+              <Text style={styles.buttonText}>Select Multiple</Text>
+            </TouchableOpacity>
+          <View style={styles.inputWrap}>
+              <TextInput  style={styles.input} placeholder="Content" onChangeText={(content) => this.setState({content})} underlineColorAndroid="transparent"/>
+          </View>
+          <View style={styles.inputWrap}>
+              <TextInput  style={styles.input} placeholder="Address" onChangeText={(address) => this.setState({address})} underlineColorAndroid="transparent"/>
+          </View>
+          <View style={styles.inputWrap}>
+              <TextInput  style={styles.input} placeholder="note" onChangeText={(note) => this.setState({note})} underlineColorAndroid="transparent"/>
+          </View>
+          <TouchableOpacity onPress={()=>this.props.navigation.navigate('MapsPage')} keyboardShouldPersistTaps={true}>
+            <View style={styles.button}>
+              <Text style={styles.buttonText}> Open Maps </Text>
+            </View>   
+          </TouchableOpacity>
+          <TouchableOpacity onPress={this.pickMultiple.bind(this)} style={styles.button}>
+            <Text style={styles.buttonText}>Send request</Text>
+          </TouchableOpacity>
+      </View>
+    </ScrollView>
+    );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    width: null,
+    height: null
+  },
+  view: {
+    paddingHorizontal:15,
+  },
+  button:{
+    backgroundColor:"#d73352",
+    paddingVertical: 8,
+    marginVertical: 5,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 30,
+},
+inputWrap:{
+  flexDirection:"row",
+  marginVertical: 5,
+  height:36,
+  backgroundColor:"transparent",
+},
+input:{
+  flex: 1,
+  paddingHorizontal: 5,
+  backgroundColor:'#FFF',
+  },
+buttonText: {
+  fontSize: 16,
+  color:'#FFFFFF',
+  textAlign: 'center',   
+},
+  footer: {
+    position: 'absolute',
+    flex:1,
+    left: 0,
+    right: 0,
+    bottom: 10,
+    },
+});

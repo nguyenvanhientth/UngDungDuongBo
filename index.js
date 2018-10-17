@@ -12,6 +12,7 @@ import MainPage from './component/MainPage';
  import ForgotPassPage from './component/ForgotPassPage';
  import SignUpPage from './component/SignUpPage';
  import UpdateImage from './component/UpdateImage';
+ import maps from './component/maps/maps';
 
 
 
@@ -24,7 +25,8 @@ const MyApp = StackNavigator({
   },
   ForgotPassPage: { screen: ForgotPassPage },
   SignUpPage: {screen: SignUpPage},
-  UpdateImagePage: {screen: UpdateImage}
+  UpdateImagePage: {screen: UpdateImage},
+  MapsPage: {screen: maps}
 });
 
 AppRegistry.registerComponent(appName, () => MyApp);
