@@ -41,7 +41,7 @@ export default class MainPage extends Component {
                 }
             }).then((res)=>res.json())
             .then((resJson) => {
-                //console.warn("resJson",resJson);
+                console.warn("resJson",resJson);
                 this.setState({
                     firstName: resJson.firstName,
                     lastName: resJson.lastName,
@@ -52,10 +52,10 @@ export default class MainPage extends Component {
                     PhoneNumber: resJson.phoneNumber,
                     DOB: resJson.dateOfBirth,
                     Gender: resJson.gender
-                });          
+                });       
             })
             .catch ((error) => {
-                console.log('AsyncStorage error: ' + error.message);
+                console.warn('AsyncStorage error: ' + error.message);
             })
                 // if(token ==undefined){
                 //     var { navigate } = this.props.navigation;

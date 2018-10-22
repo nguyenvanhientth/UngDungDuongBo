@@ -1,10 +1,15 @@
 import React, {Component} from 'react';
 import {
   View, Text, StyleSheet, ScrollView, TextInput,
-  Image, TouchableOpacity, NativeModules, Dimensions
+  Image, TouchableOpacity, NativeModules, Dimensions, AsyncStorage
 } from 'react-native';
+import env from './environment/env';
 
+const LATITUDE = 108.193318;
+const LONGITUDE = 16.072675;
 var ImagePicker = NativeModules.ImageCropPicker;
+const BASE_URL = env;
+var STORAGE_KEY = 'key_access_token';
 
 export default class App extends Component {
   static navigationOptions = {
@@ -15,11 +20,16 @@ export default class App extends Component {
     super(props);
     this.state = {
       image: null,
-      images: null,
+      images: [],
       content: '',
       address: '',
-      note: '',
+      Area: '',
+      latitude: LATITUDE,
+      longitude: LONGITUDE,
     };
+  }
+
+  componentDidMount(){
   }
 
   pickSingleWithCamera(cropping) {
@@ -61,42 +71,90 @@ export default class App extends Component {
     return this.renderImage(image);
   }
 
+  Upload = () => {
+    AsyncStorage.getItem(STORAGE_KEY).then((user_data_json) => {
+      let token = user_data_json;   
+      if(token === undefined){
+        var { navigate } = this.props.navigation;
+        navigate('LoginPage');
+       }    
+      let url = BASE_URL + 'Request/InsertRequest';
+      let data = new FormData();
+      data.append("Content",this.state.content);
+      data.append("Address",this.state.address);
+      data.append("Area",this.state.Area)
+      data.append("LatIng_longitude",this.state.longitude);
+      data.append("Latlng_latitude",this.state.latitude);
+      let arrImage = [];
+      this.state.image ? arrImage = this.state.image : arrImage = this.state.images;
+      arrImage.map((i) =>{
+        data.append('PictureRequest',{
+          uri: i.uri,
+          type: 'image/jpeg',
+        });
+      });
+      console.warn('data',data);
+      fetch(url,{
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'multipart/form-data',
+          Authorization: 'Bearer ' + token,
+          },
+        body: data,
+      })
+      .then((res) => {
+        console.warn(res); 
+        if(res.ok){
+          var { navigate } = this.props.navigation;
+          navigate('MainPage');
+          alert('Request Success!');
+        }
+          else {
+            alert('Request False!');debugger;
+        }
+      })
+      .catch((err) => {
+        console.warn(' loi update image',err);
+      })
+    })
+  }
   render() {
-    return (
-      <ScrollView>
-        <View style= {[styles.container,styles.view]}>
-          <ScrollView horizontal = {true}>
-            {this.state.image ? this.renderAsset(this.state.image) : null}
-            {this.state.images ? this.state.images.map(i => <View key={i.uri}>{this.renderAsset(i)}</View>) : null}
-          </ScrollView>
-            <TouchableOpacity onPress={() => this.pickSingleWithCamera(false)} keyboardShouldPersistTaps={true}>
+      return (
+        <ScrollView>
+          <View style= {[styles.container,styles.view]}>
+            <ScrollView horizontal = {true}>
+              {this.state.image ? this.renderAsset(this.state.image) : null}
+              {this.state.images ? this.state.images.map(i => <View key={i.uri}>{this.renderAsset(i)}</View>) : null}
+            </ScrollView>
+              <TouchableOpacity onPress={() => this.pickSingleWithCamera(false)} keyboardShouldPersistTaps={true}>
+                <View style={styles.button}>
+                  <Text style={styles.buttonText}> Select image camera</Text>
+                </View>  
+              </TouchableOpacity>
+              <TouchableOpacity onPress={this.pickMultiple.bind(this)} style={styles.button}>
+                <Text style={styles.buttonText}>Select Multiple</Text>
+              </TouchableOpacity>
+            <View style={styles.inputWrap}>
+                <TextInput  style={styles.input} placeholder="Content" onChangeText={(content) => this.setState({content})} underlineColorAndroid="transparent"/>
+            </View>
+            <View style={styles.inputWrap}>
+                <TextInput  style={styles.input} placeholder="Address" onChangeText={(address) => this.setState({address})} underlineColorAndroid="transparent"/>
+            </View>
+            <View style={styles.inputWrap}>
+                <TextInput  style={styles.input} placeholder="Area" onChangeText={(Area) => this.setState({Area})} underlineColorAndroid="transparent"/>
+            </View>
+            <TouchableOpacity onPress={()=>this.props.navigation.navigate('MapsPage')} keyboardShouldPersistTaps={true}>
               <View style={styles.button}>
-                <Text style={styles.buttonText}> Select image camera</Text>
-              </View>  
+                <Text style={styles.buttonText}> Open Maps </Text>
+              </View>   
             </TouchableOpacity>
-            <TouchableOpacity onPress={this.pickMultiple.bind(this)} style={styles.button}>
-              <Text style={styles.buttonText}>Select Multiple</Text>
+            <TouchableOpacity onPress={this.Upload.bind(this)} style={styles.button}>
+              <Text style={styles.buttonText}>Send request</Text>
             </TouchableOpacity>
-          <View style={styles.inputWrap}>
-              <TextInput  style={styles.input} placeholder="Content" onChangeText={(content) => this.setState({content})} underlineColorAndroid="transparent"/>
-          </View>
-          <View style={styles.inputWrap}>
-              <TextInput  style={styles.input} placeholder="Address" onChangeText={(address) => this.setState({address})} underlineColorAndroid="transparent"/>
-          </View>
-          <View style={styles.inputWrap}>
-              <TextInput  style={styles.input} placeholder="note" onChangeText={(note) => this.setState({note})} underlineColorAndroid="transparent"/>
-          </View>
-          <TouchableOpacity onPress={()=>this.props.navigation.navigate('MapsPage')} keyboardShouldPersistTaps={true}>
-            <View style={styles.button}>
-              <Text style={styles.buttonText}> Open Maps </Text>
-            </View>   
-          </TouchableOpacity>
-          <TouchableOpacity onPress={this.pickMultiple.bind(this)} style={styles.button}>
-            <Text style={styles.buttonText}>Send request</Text>
-          </TouchableOpacity>
-      </View>
-    </ScrollView>
-    );
+        </View>
+      </ScrollView>
+      );
   }
 }
 

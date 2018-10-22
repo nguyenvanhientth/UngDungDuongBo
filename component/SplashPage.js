@@ -13,8 +13,8 @@ class SplashPage extends Component {
     var pageUrl='LoginPage';
     try { 
         AsyncStorage.getItem(STORAGE_KEY).then((user_data_json) => {
-        let userData = JSON.parse(user_data_json);
-        if(userData.access_token !=undefined){      
+        let userData = JSON.stringify(user_data_json);
+        if(userData !== undefined){      
             pageUrl = 'MainPage';
         }                        
         });

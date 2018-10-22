@@ -5,10 +5,17 @@ import {StackNavigator,} from 'react-navigation';
 import env from './environment/env';
 
 const BASE_URL = env;
+var STORAGE_KEY = 'key_access_token';
 const background = require('./image/hinhnen.jpg') ;
 const lockIcon = require('./image/ic_lock.png');
 const userIcon = require('./image/ic_user.png');
- 
+const iconAddress = require('./image/address.png')
+const iconEmail = require('./image/email.png');
+const iconName = require('./image/name.png');
+const iconDOB = require('./image/dob.png') ;
+const iconPhone = require('./image/phone.png');
+const iconGender = require('./image/gender.jpg');
+
 export default class SignUpPage extends Component {
     static navigationOptions = {
         title: 'Register',
@@ -28,14 +35,17 @@ export default class SignUpPage extends Component {
       Gender: '',
       Position: '',
       PhoneNumber: '',
-      Note: ''
+      Area: ''
     };
   }
-  componentWillMount() {
-        console.log("componentWillMount");
-    }
-  _onPressLogin (event) {
-      let serviceUrl = BASE_URL+  "api/Account/Register";
+
+  componentDidMount(){
+  }
+
+  _onPressSignUp = () => {
+      AsyncStorage.getItem(STORAGE_KEY).then((user_data_json) => {
+      let token = user_data_json;  
+      let serviceUrl = BASE_URL+  "Account/Register";
       let userName = this.state.userName;
       let password = this.state.password;
       let confirmPassword = this.state.confirmPassword;
@@ -45,49 +55,55 @@ export default class SignUpPage extends Component {
       let DOB = this.state.DOB;
       let Address = this.state.Address;
       let Gender = this.state.Gender;
-      let position = this.state.Position;
+      let Pos = this.state.Position;
       let PhoneNumber = this.state.PhoneNumber;
-      let Note = this.state.Note;
+      let Area = this.state.Area;
       // kiem tra o day 
       if (password !== confirmPassword) {
         Alert.alert('Invalid Request', 'Inputs of "password" and "confirm password" do not match');
       } 
       else{
-        let data = new FormData();
-        data.append('username', userName);
-        data.append('password', password);
-        data.append('confirmPassword', confirmPassword);
-        data.append('Email', Email);
-        data.append('FirstName', FirstName);
-        data.append('LastName', LastName);
-        data.append('DOB', DOB);
-        data.append('Gender', Gender);
-        data.append('Address', Address);
-        data.append('Position', position);
-        data.append('PhoneNumber', PhoneNumber);
-        data.append('Note', Note);
-
         fetch(serviceUrl,{
             method: "POST",          
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'multipart/form-data'
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + token,
             },
-        body: data
+        body: JSON.stringify({
+            'UserName': userName,
+            'PassWord' : password,
+            'PasswordConfirm': confirmPassword,
+            'Email': Email,
+            'FirstName': FirstName,
+            'LastName': LastName,
+            'DateOfBirth': DOB,
+            'Address': Address,
+            'Gender': Gender,
+            'Position': Pos,
+            'Area': Area,
+            'PhoneNumber': PhoneNumber,
             })
-            .then((response) => response.json())
+        })
             .then((responseJSON) => {  
-                    if(responseJSON.message=="Success"){
+                console.warn('signup',responseJSON)
+                    if(responseJSON.ok){
                         var { navigate } = this.props.navigation;
-                        navigate('LoginPage');
-                        ToastAndroid.show(responseJSON.message, ToastAndroid.SHORT);
+                        navigate('MainPage');
+                        alert('Register Success!');
                     }
+                    else {
+                        alert('Register False!');
+                    }
+                    
             })
             .catch((error) => {
-                console.warn(error);debugger;
+                console.warn('asd',error);
             }); 
         } 
-    }
+    })
+}
+      
     _onChaneUserName = (userName) =>{
         this.setState({userName});
     }
@@ -112,14 +128,17 @@ export default class SignUpPage extends Component {
     _onChaneAddress = (Address) =>{
         this.setState({Address});
     }
-    _onChanePosition = (position) =>{
-        this.setState({position});
-    }
     _onChanePhoneNumber = (PhoneNumber) =>{
         this.setState({PhoneNumber});
     }
-    _onChaneNote = (Note) =>{
-        this.setState({Note});
+    _onChaneArea = (Area) =>{
+        this.setState({Area});
+    }
+    _updateGender = (Gender) => {
+        this.setState({Gender: Gender})
+    }
+    _updatePosition = (Position) => {
+        this.setState({Position: Position})
     }
     render() {
         var { navigate } = this.props.navigation;
@@ -149,43 +168,44 @@ export default class SignUpPage extends Component {
                     </View>
                     <View style={styles.inputWrap}>
                         <View style={styles.iconWrap}>
-                            <Image source={userIcon} resizeMode="contain" style={styles.icon}/>
+                            <Image source={iconEmail} resizeMode="contain" style={styles.icon}/>
                         </View>
                         <TextInput  style={styles.input} placeholder="Email" onChangeText={this._onChaneEmail.bind(this)} underlineColorAndroid="transparent"/>
                     </View>
                     <View style={styles.inputWrap}>
                         <View style={styles.iconWrap}>
-                            <Image source={userIcon} resizeMode="contain" style={styles.icon}/>
+                            <Image source={iconName} resizeMode="contain" style={styles.icon}/>
                         </View>
                         <TextInput  style={styles.input} placeholder="FirstName" onChangeText={this._onChaneFirstName.bind(this)} underlineColorAndroid="transparent"/>
                     </View>
                     <View style={styles.inputWrap}>
                         <View style={styles.iconWrap}>
-                            <Image source={userIcon} resizeMode="contain" style={styles.icon}/>
+                            <Image source={iconName} resizeMode="contain" style={styles.icon}/>
                         </View>
                         <TextInput  style={styles.input} placeholder="LastName" onChangeText={this._onChaneLastName.bind(this)} underlineColorAndroid="transparent"/>
                     </View>
                     <View style={styles.inputWrap}>
                         <View style={styles.iconWrap}>
-                            <Image source={userIcon} resizeMode="contain" style={styles.icon}/>
+                            <Image source={iconDOB} resizeMode="contain" style={styles.icon}/>
                         </View>
-                        <TextInput  style={styles.input} placeholder="DateOfBirth" onChangeText={this._onChaneDOB.bind(this)} underlineColorAndroid="transparent"/>
+                        <TextInput  style={styles.input} placeholder="mm/dd/yy" onChangeText={this._onChaneDOB.bind(this)} underlineColorAndroid="transparent"/>
                     </View>
                     <View style={styles.inputWrap}>
                         <View style={styles.iconWrap}>
-                            <Image source={userIcon} resizeMode="contain" style={styles.icon}/>
+                            <Image source={iconAddress} resizeMode="contain" style={styles.icon}/>
                         </View>
                         <TextInput  style={styles.input} placeholder="Address" onChangeText={this._onChaneAddress.bind(this)} underlineColorAndroid="transparent"/>
                     </View>
                     <View style={{flexDirection:"row",marginVertical: 5,height:36,}}>
                         <View style={styles.iconWrap}>
-                            <Image source={userIcon} resizeMode="contain" style={styles.icon}/>
+                            <Image source={iconGender} resizeMode="contain" style={styles.icon}/>
                         </View>
                         <Text style = {styles.label}>Gender</Text>
                         <Picker
                             selectedValue={this.state.Gender}
                             style={styles.combobox}
-                            onValueChange={(itemValue, itemIndex) => this.setState({Gender: itemValue})}>
+                            onValueChange={this._updateGender.bind(this)}>
+                            <Picker.Item label="SelectGender" value=""/>
                             <Picker.Item label="Nam" value="Nam" />
                             <Picker.Item label="Nữ" value="Nữ"/>
                         </Picker>
@@ -196,27 +216,27 @@ export default class SignUpPage extends Component {
                         </View>
                         <Text style = {styles.label}>Position</Text>
                         <Picker
-                            selectedValue={this.state.position}
+                            selectedValue={this.state.Position}
                             style={styles.combobox}
-                            onValueChange={(itemValue, itemIndex) => this.setState({position: itemValue})}>
-                            <Picker.Item label="Admin" value="Admin" />
+                            onValueChange={this._updatePosition.bind(this)}>
+                            <Picker.Item label="Select Position" value=""/>
                             <Picker.Item label="Supervisor" value="Supervisor"/>
-                            <Picker.Item label="Repair Person" value="Repair Person" />
+                            <Picker.Item label="Repair Person" value="RepairPerson" />
                         </Picker>
                     </View>
                     <View style={styles.inputWrap}>
                         <View style={styles.iconWrap}>
-                            <Image source={userIcon} resizeMode="contain" style={styles.icon}/>
+                            <Image source={iconPhone} resizeMode="contain" style={styles.icon}/>
                         </View>
                         <TextInput  style={styles.input} placeholder="PhoneNumber" onChangeText={this._onChanePhoneNumber.bind(this)} underlineColorAndroid="transparent"/>
                     </View>
                     <View style={styles.inputWrap}>
                         <View style={styles.iconWrap}>
-                            <Image source={userIcon} resizeMode="contain" style={styles.icon}/>
+                            <Image source={iconPhone} resizeMode="contain" style={styles.icon}/>
                         </View>
-                        <TextInput  style={styles.input} placeholder="Note" onChangeText={this._onChaneNote.bind(this)} underlineColorAndroid="transparent"/>
+                        <TextInput  style={styles.input} placeholder="Area" onChangeText={this._onChaneArea.bind(this)} underlineColorAndroid="transparent"/>
                     </View>
-                    <TouchableOpacity activeOpacity={.5} onPress={this._onPressLogin.bind(this)} keyboardShouldPersistTaps={true}>
+                    <TouchableOpacity activeOpacity={.5} onPress={this._onPressSignUp.bind(this)} keyboardShouldPersistTaps={true}>
                         <View style={styles.button}>
                             <Text style={styles.buttonText}> Sign Up</Text>
                         </View>           

@@ -2,6 +2,10 @@ import React, {Component} from 'React';
 import {AppRegistry,FlatList,StyleSheet,Text,View,Image,Alert,TouchableHighlight,Platform} from 'react-native';
 import flatlistData from '../data/flatlistData';
 import Swipeout from 'react-native-swipeout';
+import env from './environment/env';
+
+const BASE_URL = env;
+var STORAGE_KEY = 'key_access_token';
 
 class FlatListItem extends Component{
     constructor(props){
@@ -11,6 +15,33 @@ class FlatListItem extends Component{
         }
     }
 
+    componentDidMount(){
+        AsyncStorage.getItem(STORAGE_KEY).then((user_data_json) => {
+          let token = user_data_json;   
+          if(token ==undefined){
+            var { navigate } = this.props.navigation;
+            navigate('LoginPage');
+           }     
+          fetch(BASE_URL + "Account/GetUserInformation",{
+              method: "GET",
+              headers:{ 
+                  'cache-control': 'no-cache',
+                  Authorization: 'Bearer ' + token,
+              }
+          })
+          .then((res) => res.json())
+          .then((resJson) => {   
+            // this.setState({status: resJson.json()});  
+            // const res = JSON.stringify(resJson);
+            //console.warn('resJson',resJson);debugger;
+    
+          })
+          .catch ((error) => {
+              console.warn('AsyncStorage error 22222: ' + error.message);
+          })
+        });
+      }
+    
     render() {
         const swipeSetting = {
             autoClose : true,

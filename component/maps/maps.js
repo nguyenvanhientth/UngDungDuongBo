@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {
   View, Text, StyleSheet, ScrollView, Alert,
-  Image, TouchableOpacity, NativeModules, Dimensions
+  Image, TouchableOpacity, NativeModules, AsyncStorage
 } from 'react-native';
 import MapView, { Marker, AnimatedRegion, Polyline } from "react-native-maps";
 import haversine from "haversine";
@@ -116,6 +116,7 @@ export default class maps extends Component{
                   </Text>
                 </TouchableOpacity>
               </View>
+              
             </View>
           );
         }

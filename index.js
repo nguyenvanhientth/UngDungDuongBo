@@ -18,11 +18,8 @@ import MainPage from './component/MainPage';
 
 const MyApp = StackNavigator({
   SplashPage: { screen: SplashPage },
-  MainPage: { 
-    screen: MainPage, 
-  },
-  LoginPage: { screen: LoginPage,
-  },
+  MainPage: { screen: MainPage, },
+  LoginPage: { screen: LoginPage,},
   ForgotPassPage: { screen: ForgotPassPage },
   SignUpPage: {screen: SignUpPage},
   UpdateImagePage: {screen: UpdateImage},

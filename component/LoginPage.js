@@ -23,7 +23,7 @@ export default class LoginPage extends Component {
   }
 
   _onPressLogin = () => {
-      let serviceUrl =  BASE_URL + "Authentication";
+      let serviceUrl =  BASE_URL + "Account/login";
       let userName = this.state.userNames;
       let password = this.state.passwords;
       var access_token = '';
@@ -31,17 +31,20 @@ export default class LoginPage extends Component {
         alert('Ban chua nhap day du! ')
       }
       else{
-        let postData = new FormData();
-        postData.append('UserName',userName);
-        postData.append('PassWord',password);   
+        // let postData = new FormData();
+        // postData.append('UserName',userName);
+        // postData.append('PassWord',password);   
         //console.warn('asd',userName,password)           
         fetch(serviceUrl,{
           method: "POST",  
         headers: {
           'Accept': 'application/json',
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'application/json'
         },
-              body: postData
+              body: JSON.stringify({
+                'UserName' : userName,
+                'PassWord' :password
+              })
         })
           .then((response) => response.json())
           .then((responseJSON) => {      
@@ -63,7 +66,7 @@ export default class LoginPage extends Component {
           })
           .catch((error) => {
             Alert.alert('Login failure');
-            console.log(error);
+            //console.warn('asdsad',error);
           }); 
       }
       
