@@ -80,17 +80,20 @@ export default class App extends Component {
        }    
       let url = BASE_URL + 'Request/InsertRequest';
       let data = new FormData();
+      const sessionId = new Date().getTime();
       data.append("Content",this.state.content);
       data.append("Address",this.state.address);
       data.append("Area",this.state.Area)
       data.append("LatIng_longitude",this.state.longitude);
       data.append("Latlng_latitude",this.state.latitude);
       let arrImage = [];
-      this.state.image ? arrImage = this.state.image : arrImage = this.state.images;
+      this.state.image ? arrImage.push(this.state.image) : arrImage = [...this.state.images];
+      console.warn('image',arrImage);
       arrImage.map((i) =>{
-        data.append('PictureRequest',{
+        data.append("PictureRequest",{
           uri: i.uri,
-          type: 'image/jpeg',
+          type: 'image/jpg',
+          name: `${sessionId}.jpg`,
         });
       });
       console.warn('data',data);

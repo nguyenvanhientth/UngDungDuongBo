@@ -22,7 +22,7 @@ class FlatListItem extends Component{
             var { navigate } = this.props.navigation;
             navigate('LoginPage');
            }     
-          fetch(BASE_URL + "Account/GetUserInformation",{
+          fetch(BASE_URL + "Request/GetRequest",{
               method: "GET",
               headers:{ 
                   'cache-control': 'no-cache',

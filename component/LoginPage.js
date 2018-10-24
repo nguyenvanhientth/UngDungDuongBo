@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {AppRegistry,StyleSheet,Text,TextInput,Button,View,Alert,TouchableOpacity,TouchableHighlight,
     Image,AsyncStorage,ImageBackground} from 'react-native';
-import {StackNavigator,} from 'react-navigation';
 import env from './environment/env'
 
 const BASE_URL = env;

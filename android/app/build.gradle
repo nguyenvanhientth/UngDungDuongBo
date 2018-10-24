@@ -110,10 +110,12 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file(MY_AWESOME_PROJECT_RELEASE_STORE_FILE)
-            storePassword MY_AWESOME_PROJECT_RELEASE_STORE_PASSWORD
-            keyAlias MY_AWESOME_PROJECT_RELEASE_KEY_ALIAS
-            keyPassword MY_AWESOME_PROJECT_RELEASE_KEY_PASSWORD
+            if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
+                storeFile file(MYAPP_RELEASE_STORE_FILE)
+                storePassword MYAPP_RELEASE_STORE_PASSWORD
+                keyAlias MYAPP_RELEASE_KEY_ALIAS
+                keyPassword MYAPP_RELEASE_KEY_PASSWORD
+            }
         }
     }
     splits {
